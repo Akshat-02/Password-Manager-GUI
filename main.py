@@ -2,7 +2,7 @@
 from tkinter import *
 from tkinter import messagebox
 import gen_passwd
-
+import pyperclip as clip
 
 # ---------------------------Constants and globa variables ----------------------- #
 PINK = "#e2979c"
@@ -20,6 +20,8 @@ def pass_gen():
 
     password = gen_passwd.password_generator()        #Retrieving generated password from gen_passwd module
     passwd_gen.insert(END, password)
+
+    clip.copy(password)          #Using pyperclip module to copy the password in clipboard 
 
     
 

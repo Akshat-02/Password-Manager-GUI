@@ -39,4 +39,3 @@ def password_generator():
 
     return password_generated
 
-
