@@ -1,9 +1,8 @@
-from calendar import c
-from tkinter import *
-from xmlrpc.client import Unmarshaller
-from numpy import save
 
-from pyparsing import col
+from tkinter import *
+from tkinter import messagebox
+import gen_passwd
+
 
 # ---------------------------Constants and globa variables ----------------------- #
 PINK = "#e2979c"
@@ -17,12 +16,44 @@ FONT_NAME = "Courier"
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 def pass_gen():
-    pass
+    passwd_gen.delete(0, END)         #Clearing the password field incase user click generate button again to avoid appending
+
+    password = gen_passwd.password_generator()        #Retrieving generated password from gen_passwd module
+    passwd_gen.insert(END, password)
+
+    
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 
 def pass_save():
-    pass
+
+    #Getting the user input wth get() method
+    website_name = website_entry.get()                 
+    uname = uname_entry.get()
+    passwd = passwd_gen.get()
+
+    # Condition to check for empty entry fields (Should be alerted for this)
+    if len(website_name) == 0 or len(passwd) == 0:
+        
+        # Usig messagebox module in tkinter for dialogue boxes
+        messagebox.showwarning(title= "Something's missing", message= "One or more fields are empty!")        
+
+    else:
+        confirm = messagebox.askokcancel(title= "Confirm", message=f"Save these details:- \n Website: {website_name}\n Email/Username: {uname}\n Password: {passwd}")
+        
+        if confirm:
+            with open("shadow.txt", "a") as pass_file:
+                pass_file.write(f"Website : {website_name}\nEmail/Username : {uname}\nPlain Password : {passwd}\n\n----------------------------------\n")
+
+
+            #Clearing the data in entry widgets once the Add button is clicked.
+            website_entry.delete(0, END)                # 0 is the first index and END is the last index
+            uname_entry.delete(0, END)                  # this is the range we want the data to get cleared
+            passwd_gen.delete(0, END)
+
+            uname_entry.insert(END, "@gmail.com")       # Adding the default username text back
+
+
 
 # ---------------------------- UI SETUP ------------------------------- #
 
