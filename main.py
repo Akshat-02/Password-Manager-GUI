@@ -24,7 +24,6 @@ def pass_gen():
     clip.copy(password)          #Using pyperclip module to copy the password in clipboard 
 
     
-
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 
 def pass_save():
