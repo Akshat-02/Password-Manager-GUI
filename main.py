@@ -43,7 +43,7 @@ def pass_save():
         confirm = messagebox.askokcancel(title= "Confirm", message=f"Save these details:- \n Website: {website_name}\n Email/Username: {uname}\n Password: {passwd}")
         
         if confirm:
-            with open("shadow.txt", "a") as pass_file:
+            with open("F:\shadow.txt", "a") as pass_file:
                 pass_file.write(f"Website : {website_name}\nEmail/Username : {uname}\nPlain Password : {passwd}\n\n----------------------------------\n")
 
 
