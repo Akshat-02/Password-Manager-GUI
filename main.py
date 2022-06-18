@@ -60,7 +60,7 @@ def pass_save():
                     #updating with new data
                     data.update(json_dict)                        #update() method is used to update old data with new data
 
-            except:
+            except FileNotFoundError:
                 with open("shadow.json", "w") as pass_file:
                     #writing updated data to the json file
                     json.dump(json_dict, pass_file, indent=4)
