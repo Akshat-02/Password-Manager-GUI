@@ -10,9 +10,9 @@ def password_generator():
     symbols = list(string.punctuation)
 
     #Specifiyng the max and min characters in password
-    count_letters = random.randint(12, 14)        
-    count_numbers = random.randint(6, 8)
-    count_symbols = random.randint(6, 8)
+    count_letters = random.randint(14, 16)        
+    count_numbers = random.randint(8, 10)
+    count_symbols = random.randint(8, 10)
 
     password_list = []
 

@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import messagebox
 import gen_passwd
 import pyperclip as clip
+import json
 
 # ---------------------------Constants and globa variables ----------------------- #
 PINK = "#e2979c"
@@ -33,6 +34,14 @@ def pass_save():
     uname = uname_entry.get()
     passwd = passwd_gen.get()
 
+
+    json_dict = {
+        website_name:{
+            "Username/Email": uname,
+            "Plain text Password": passwd
+        }
+    }
+
     # Condition to check for empty entry fields (Should be alerted for this)
     if len(website_name) == 0 or len(passwd) == 0:
         
@@ -43,9 +52,23 @@ def pass_save():
         confirm = messagebox.askokcancel(title= "Confirm", message=f"Save these details:- \n Website: {website_name}\n Email/Username: {uname}\n Password: {passwd}")
         
         if confirm:
-            with open("shadow.txt", "a") as pass_file:
-                pass_file.write(f"Website : {website_name}\nEmail/Username : {uname}\nPlain Password : {passwd}\n\n----------------------------------\n")
+            try:
+                with open("shadow.json", "r") as pass_file:
+                    #reading old data
+                    data = json.load(pass_file)                   #load() method is used to read the file for json data where loads() is for json string
 
+                    #updating with new data
+                    data.update(json_dict)                        #update() method is used to update old data with new data
+
+            except:
+                with open("shadow.json", "w") as pass_file:
+                    #writing updated data to the json file
+                    json.dump(json_dict, pass_file, indent=4)
+
+            else:
+                with open("shadow.json", "w") as pass_file:
+                    json.dump(data, pass_file, indent=4)
+                
 
             #Clearing the data in entry widgets once the Add button is clicked.
             website_entry.delete(0, END)                # 0 is the first index and END is the last index
