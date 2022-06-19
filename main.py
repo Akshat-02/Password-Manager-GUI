@@ -1,6 +1,8 @@
 
+import email
 from tkinter import *
 from tkinter import messagebox
+from tkinter import font
 import gen_passwd
 import pyperclip as clip
 import json
@@ -14,6 +16,38 @@ YELLOW = "#f7f5dd"
 WEIRD_BLUE = "#1C658C"
 FONT_NAME = "Courier"
 
+# ----------------------------Search website------------------------------------- #
+
+def search_website():
+    website_name = website_entry.get()
+
+    #checking if website entry is empty
+    if len(website_name) == 0:
+        messagebox.showwarning(title= "Need Input", message= "Please provide some data!")
+
+        return                    # if it is empty then exit the function and it won't run further
+
+    with open("shadow.json", "r") as data_file:
+        data = json.load(data_file)
+
+    try:
+        email = data[website_name]["Username/Email"]
+        passwd = data[website_name]["Plain text Password"]
+
+    except KeyError as error_msg:
+        messagebox.showerror(title= "Error", message= f"No information found for website: {error_msg}")
+        
+    else:                                         # backslash (\) is used to indicate a line continuation
+
+        yes = messagebox.askyesno(title= f"Website: {website_name}", message= f"""Email/Username:     {email}\n\
+Password:    {passwd}\n\n Do you want to copy password to clibboard?""")
+
+        if yes:
+            clip.copy(passwd)              #Using pyperclip module to copy the password in clipboard
+        
+    finally:
+        website_entry.delete(0, END)
+
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 def pass_gen():
@@ -21,8 +55,6 @@ def pass_gen():
 
     password = gen_passwd.password_generator()        #Retrieving generated password from gen_passwd module
     passwd_gen.insert(END, password)
-
-    clip.copy(password)          #Using pyperclip module to copy the password in clipboard 
 
     
 # ---------------------------- SAVE PASSWORD ------------------------------- #
@@ -49,9 +81,14 @@ def pass_save():
         messagebox.showwarning(title= "Something's missing", message= "One or more fields are empty!")        
 
     else:
-        confirm = messagebox.askokcancel(title= "Confirm", message=f"Save these details:- \n Website: {website_name}\n Email/Username: {uname}\n Password: {passwd}")
+        confirm = messagebox.askokcancel(title= "Confirm", message=f"""Save these details:- \n\n \
+Website:    {website_name}\n Email/Username:    {uname}\n Password:    {passwd}""")
         
         if confirm:
+
+            #Using pyperclip module to copy the password in clipboard    
+            clip.copy(passwd)           
+
             try:
                 with open("shadow.json", "r") as pass_file:
                     #reading old data
@@ -145,6 +182,10 @@ save_pass.config(pady=1)
 
 save_pass.grid(row=4, column=1)
 
+
+search = Button(text= "Search", width=15, command= search_website, bg = GREEN)
+
+search.grid(row=1, column=2)
 
 
 
